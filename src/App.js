@@ -4,15 +4,18 @@ import Employee from './components/Employee';
 function App() {
   console.log("We are about to list the employees");
   const showEmployees = true;
-  let content;
-  if(showEmployees){
-    content = <Employee />
-  }else{
-    content = <p>You are not allowed to see employees</p>
-  }
+  
   return (
     <div className="App">
-      {content}
+      {console.log(`Inside the return, showEmployees ${showEmployees}`)}
+      {showEmployees ?
+        <><Employee />
+          <Employee />
+          <Employee />
+          <Employee />
+          <Employee /></>
+        : <p>You are not allowed to see the employees</p>
+      }
     </div>
   );
 }
