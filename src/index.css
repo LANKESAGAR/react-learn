@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+.role{
+  color: blue;
+}
+
+.norole{
+  color: red;
+}
