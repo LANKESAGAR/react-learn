@@ -4,7 +4,6 @@ import { useState } from 'react';
 import {v4 as uuid4} from 'uuid';
 import AddEmployee from '../components/AddEmployee copy';
 import EditEmployee from '../components/EditEmployee';
-import Header from '../components/Header';
 
 function Employees() {
   const [role, setRole] = useState('role');
@@ -50,7 +49,7 @@ function Employees() {
   
   function updateEmployee(id, newName, newRole){
     const updatedEmployees = employees.map((employee)=>{
-      if(id == employee.id){
+      if(id === employee.id){
         return {...employee, name:newName, role:newRole}
       }
       return employee;
@@ -72,7 +71,6 @@ function Employees() {
   return (
     <div className="App bg-gray-300 min-h-screen">
       {console.log(`Inside the return, showEmployees ${showEmployees}`)}
-      <Header />
       {showEmployees ?
         <>
           <div className='flex flex-wrap justify-center my-2'>
