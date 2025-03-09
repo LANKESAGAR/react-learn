@@ -31,11 +31,8 @@ function EditEmployee(props) {
                 </Modal.Header>
                 <Modal.Body>
                     <form onSubmit={(e)=>{
+                        handleClose();
                         e.preventDefault();
-                        console.log(e);
-                        console.log("Hello from edit employee details");
-                        console.log(props.id, name, role);
-                        console.log(name);
                         props.updateEmployee(props.id, name, role);
                     }}
                     id="editModal" className="w-full max-w-sm">
