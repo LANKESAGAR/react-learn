@@ -4,7 +4,7 @@ import { useState } from 'react';
 import {v4 as uuid4} from 'uuid';
 import AddEmployee from '../components/AddEmployee copy';
 import EditEmployee from '../components/EditEmployee';
-import Header from './components/Header';
+import Header from '../components/Header';
 
 function Employees() {
   const [role, setRole] = useState('role');
