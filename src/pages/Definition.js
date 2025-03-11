@@ -7,6 +7,7 @@ export default function Definition() {
 
     const [word, setWord] = useState([]);
     const [notFound, setNotFound] = useState(false);
+    const [error, setError] = useState(false);
     let {search} = useParams();
     const navigate = useNavigate();
 
@@ -16,6 +17,12 @@ export default function Definition() {
                 if(response.status === 404){
                     setNotFound(true);
                 }
+
+                if(!response.ok){
+                    setError(true);
+                    throw new Error("Seomething went wrong")
+                }
+
                 return response.json()
 
             })
@@ -37,6 +44,14 @@ export default function Definition() {
         return (
             <>
             <NotFound />
+            <Link to="/dictionary">Search for Another Word</Link>
+            </>
+        );
+    }
+    if(error){
+        return (
+            <>
+            <p>Something went wrong, try again</p>
             <Link to="/dictionary">Search for Another Word</Link>
             </>
         );
