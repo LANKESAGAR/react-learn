@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react"
 import {v4 as uuid4} from 'uuid';
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import NotFound from "../components/NotFound";
 
 export default function Definition() {
 
     const [word, setWord] = useState([]);
+    const [notFound, setNotFound] = useState(false);
     let {search} = useParams();
     const navigate = useNavigate();
 
@@ -12,16 +14,33 @@ export default function Definition() {
         fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + search)
             .then((response) => {
                 if(response.status === 404){
-                    navigate('/404');
+                    setNotFound(true);
                 }
                 return response.json()
 
             })
             .then((data) => {
-                setWord(data[0].meanings)
-                console.log(data[0].meanings)
-            });
-    }, [])
+                if (data && Array.isArray(data) && data.length > 0 && data[0].meanings) {
+                    setWord(data[0].meanings);
+                    console.log(data[0].meanings);
+                  } else {
+                    setNotFound(true); // Handle unexpected API responses
+                  }
+            })
+            .catch((error) => {
+                console.error("Error fetching definition:", error);
+                setNotFound(true);
+              });
+    }, [search])
+
+    if(notFound){
+        return (
+            <>
+            <NotFound />
+            <Link to="/dictionary">Search for Another Word</Link>
+            </>
+        );
+    }
     return (
         <>
             {word ? (  <>
