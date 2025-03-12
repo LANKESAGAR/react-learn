@@ -5,9 +5,11 @@ export default function DefinitionSearch(){
     const navigate = useNavigate();
 
     return(
-    <form className="flex space-between space-x-2 max-w-[300px] " onSubmit={()=>{
+    <form className="flex space-between space-x-2 max-w-[300px] " 
+    onSubmit={()=>{
         navigate('/definition/' + word);
-    }}>
+    }}
+    >
         <input 
             className="shrink min-w-0 px-2 py-1 rounded border-2 border-purple-600" 
             type="text" 
