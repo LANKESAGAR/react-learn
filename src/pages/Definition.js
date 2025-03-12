@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import {v4 as uuid4} from 'uuid';
 import { useParams, useNavigate, Link } from "react-router-dom";
 import NotFound from "../components/NotFound";
+import DefinitionSearch from "../components/DefinitionSearch";
 
 export default function Definition() {
 
@@ -68,7 +69,10 @@ export default function Definition() {
                         {meaning.definitions[0].definition}
                     </p>
                 );
-            })} </>
+            })} 
+            <p>Search Again:</p>
+            <DefinitionSearch />
+            </>
         ): null}
         </>);
 }
