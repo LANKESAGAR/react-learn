@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Link, useNavigate} from "react-router-dom"
 import NotFound from "../components/NotFound";
+import { baseurl } from "../shared";
 
 export default function Customer() {
     const { id } = useParams();
@@ -10,13 +11,13 @@ export default function Customer() {
     const navigate = useNavigate();
     useEffect(() => {
         if (!id) return; 
-        const url = `http://localhost:8000/api/customer/${id}`;
+        const url = baseurl + 'api/customer/' + id;
         fetch(url)
             .then((response) => {
                 if(response.status === 404){
                     setNotFound(true);
                 }
-                response.json()
+                return response.json()
             })
             .then((data) => {
                 setCustomer(data.customer);
