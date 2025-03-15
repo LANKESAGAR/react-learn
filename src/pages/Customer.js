@@ -13,9 +13,9 @@ export default function Customer() {
     const [changed, setChanged] = useState(false);
 
     useEffect(() => {
-        console.log('customer', customer);
-        console.log('tempCustomer', tempCustomer);
-        console.log('changed', changed)
+        // console.log('customer', customer);
+        // console.log('tempCustomer', tempCustomer);
+        // console.log('changed', changed)
     });
 
     useEffect(() => {
@@ -35,6 +35,25 @@ export default function Customer() {
             .catch((error) => console.error("Error fetching customer:", error));
     }, [id]);
 
+    function updateCustomer(){
+        const url = baseurl + 'api/customer/' + id;
+        fetch(url, {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(tempCustomer),
+        })
+        .then((response)=>{
+            return response.json()
+        })
+        .then((data)=>{
+            setCustomer(data.customer);
+            setChanged(false);
+            console.log(data);
+        }).catch()
+    }
+
     return (
         <>
             {notFound ? <p>The customer with id {id} is not found</p> : null}
@@ -50,10 +69,11 @@ export default function Customer() {
                         setTempCustomer({ ...tempCustomer, industry: e.target.value })
                     }} />
                 {changed ? <>
-                    <button onClick={(e) =>{
-                        setTempCustomer({...customer});
+                    <button onClick={(e) => {
+                        setTempCustomer({ ...customer });
                         setChanged(false);
-                    } }>Cancel</button> <button>Save</button>
+                    }}>Cancel </button> 
+                    <button onClick={updateCustomer}>Save</button>
                 </> : null}
             </div> : null}
             <button onClick={(e) => {
