@@ -7,7 +7,7 @@ export default function Customers() {
     const [customers, setCustomers] = useState();
     const [show, setShow] = useState(false);
 
-    function toggleShow(){
+    function toggleShow() {
         setShow(!show);
     }
 
@@ -21,48 +21,52 @@ export default function Customers() {
             });
     }, []);
 
-    function newCustomer(name, industry){
-        const data = {name:name, industry:industry};
+    function newCustomer(name, industry) {
+        const data = { name: name, industry: industry };
         const url = baseurl + 'api/customers/';
         fetch(url, {
             method: 'POST',
-            headers:{
+            headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data),
         })
-            .then((response)=>{
-                if(!response.ok){
+            .then((response) => {
+                if (!response.ok) {
                     throw new Error('Something went wrong')
                 }
                 return response.json();
             })
-            .then((data)=>{
+            .then((data) => {
                 toggleShow();
                 console.log(data)
-                setCustomers([...customers,data.customer]);
+                setCustomers([...customers, data.customer]);
             })
-            .catch((e)=>{
+            .catch((e) => {
                 console.log(e);
             });
     }
     return (
         <>
             <h1>Here are our customers:</h1>
-            <ul>
+
             {customers ? customers.map((customer) => {
-                return(
-                    
-                        <li key={customer.id}>
-                            <Link to={"/customer/" + customer.id}>{customer.name}</Link>
-                        </li>
-              
+                return (
+
+                    <div className="m-2" key={customer.id}>
+                        <Link to={"/customer/" + customer.id}>
+                            <button className="no-underline bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"> 
+                                {customer.name}
+                            </button>
+
+                        </Link>
+                    </div>
+
                 )
 
             }) : null
             }
-                  </ul>
-                  <AddCustomer newCustomer={newCustomer} show={show} toggleShow={toggleShow} />
+            <AddCustomer newCustomer={newCustomer} show={show} toggleShow={toggleShow} />
         </>
 
     );
