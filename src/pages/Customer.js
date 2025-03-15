@@ -13,9 +13,18 @@ export default function Customer() {
     const [changed, setChanged] = useState(false);
 
     useEffect(() => {
-        // console.log('customer', customer);
-        // console.log('tempCustomer', tempCustomer);
-        // console.log('changed', changed)
+        if(!customer) return;
+        if(!customer) return;
+        let equal = true;
+        if(customer.name !== tempCustomer.name){
+            equal = false;
+        }
+        if(customer.industry !== tempCustomer.industry){
+            equal = false;
+        }
+        if(equal){
+            setChanged(false);
+        }
     });
 
     useEffect(() => {
@@ -61,19 +70,19 @@ export default function Customer() {
                 <input className='m-2 block px-2' type='text' value={tempCustomer.name}
                     onChange={(e) => {
                         setChanged(true);
-                        setTempCustomer({ ...tempCustomer, name: e.target.value })
+                        setTempCustomer({ ...tempCustomer, name: e.target.value });
                     }} />
                 <input className='m-2 block px-2' type='text' value={tempCustomer.industry}
                     onChange={(e) => {
                         setChanged(true);
-                        setTempCustomer({ ...tempCustomer, industry: e.target.value })
+                        setTempCustomer({ ...tempCustomer, industry: e.target.value });
                     }} />
                 {changed ? <>
-                    <button onClick={(e) => {
+                    <button className="m-2" onClick={(e) => {
                         setTempCustomer({ ...customer });
                         setChanged(false);
                     }}>Cancel </button> 
-                    <button onClick={updateCustomer}>Save</button>
+                    <button className="m-2" onClick={updateCustomer}>Save</button>
                 </> : null}
             </div> : null}
             <button onClick={(e) => {
