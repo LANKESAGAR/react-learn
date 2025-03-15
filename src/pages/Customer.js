@@ -11,6 +11,7 @@ export default function Customer() {
     const [notFound, setNotFound] = useState();
     const navigate = useNavigate();
     const [changed, setChanged] = useState(false);
+    const [error, setError] = useState();
 
     useEffect(() => {
         if(!customer) return;
@@ -54,13 +55,18 @@ export default function Customer() {
             body: JSON.stringify(tempCustomer),
         })
         .then((response)=>{
+            if(!response.ok) throw new Error('Something went wrong');
             return response.json()
         })
         .then((data)=>{
             setCustomer(data.customer);
             setChanged(false);
             console.log(data);
-        }).catch()
+            setError(undefined);
+        }).catch((e)=>{
+            console.log('e',e);
+            setError(e.message);
+        })
     }
 
     return (
@@ -84,7 +90,6 @@ export default function Customer() {
                     }}>Cancel </button> 
                     <button className="m-2" onClick={updateCustomer}>Save</button>
                 </> : null}
-            </div> : null}
             <button onClick={(e) => {
                 const url = baseurl + '/api/customer/' + id;
                 fetch(url, {
@@ -102,6 +107,8 @@ export default function Customer() {
                         console.log(e);
                     })
             }}>DELETE</button>
+            {error ? <p>{error}</p> : null}
+               </div> : null}
             <br />
             <Link to='/customers'>Go Back</Link>
         </>
