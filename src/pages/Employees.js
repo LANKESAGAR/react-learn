@@ -2,7 +2,7 @@ import '../index.css';
 import Employee from '../components/Employee';
 import { useState } from 'react';
 import {v4 as uuid4} from 'uuid';
-import AddEmployee from '../components/AddEmployee copy';
+import AddEmployee from '../components/AddEmployee';
 import EditEmployee from '../components/EditEmployee';
 
 function Employees() {
