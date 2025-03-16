@@ -15,13 +15,18 @@ export default function Customers() {
     useEffect(() => {
         console.log('Fetching...')
         const url = baseurl + 'api/customers/';
-        fetch(url)
+        fetch(url, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem('access')
+            }
+        })
             .then((response) => {
 
                 if(response.status === 401){
                     navigate('/login');
                 }
-                response.json()
+                return response.json()
             })
             .then((data) => {
                 setCustomers(data.customers);

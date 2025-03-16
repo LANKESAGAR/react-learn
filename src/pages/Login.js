@@ -9,12 +9,23 @@ export default function Login() {
     function login(e){
         e.preventDefault();
         const url = baseurl + 'api/token/';
-        fetch(url)
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password,
+            }),
+        })
         .then((response)=>{
             return response.json();
         })
         .then((data)=>{
-            console.log(data);
+            localStorage.setItem('access',data.access);
+            localStorage.setItem('refresh',data.refresh);
+            console.log(localStorage);
         })
     }
 
@@ -41,7 +52,7 @@ export default function Login() {
                 <div className="md:w-3/4">
                     <input id="password"
                         className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                        type='text' value={password}
+                        type='password' value={password}
                         onChange={(e) => {
                             setPassowrd(e.target.value);
                         }} />

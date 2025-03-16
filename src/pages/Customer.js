@@ -26,12 +26,17 @@ export default function Customer() {
         if (equal) {
             setChanged(false);
         }
-    });
+    },[customer, tempCustomer]);
 
     useEffect(() => {
         if (!id) return;
         const url = baseurl + 'api/customer/' + id;
-        fetch(url)
+        fetch(url,{
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem('access')
+            }
+        })
             .then((response) => {
                 if (response.status === 404) {
                     setNotFound(true);
@@ -48,7 +53,7 @@ export default function Customer() {
                 setTempCustomer(data.customer);
                 setError(undefined);
             })
-            .catch((e) => setError(e));
+            .catch((e) => setError(e.message || "An error occurred"));
     }, [id]);
 
     function updateCustomer(e) {
@@ -58,10 +63,14 @@ export default function Customer() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + localStorage.getItem('access')
             },
             body: JSON.stringify(tempCustomer),
         })
             .then((response) => {
+                if(response.status === 401){
+                    navigate('/login')
+                }
                 if (!response.ok) throw new Error('Something went wrong');
                 return response.json()
             })
@@ -123,18 +132,23 @@ export default function Customer() {
                     onClick={(e) => {
                         const url = baseurl + '/api/customer/' + id;
                         fetch(url, {
-                            method: 'DELETE', headers: {
-                                'Content-Type': 'application/json'
+                            method: 'DELETE', 
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: 'Bearer ' + localStorage.getItem('access')
                             }
                         })
                             .then((response) => {
+                                if(response.status === 401){
+                                    navigate('/login')
+                                }
                                 if (!response.ok) {
                                     throw new Error('Something went wrong')
                                 }
                                 navigate('/customers');
                             })
                             .catch((e) => {
-                                setError(e.message)
+                                setError(e.message || "An error occurred")
                             })
                     }}>Delete</button>
                     </div>
