@@ -35,6 +35,8 @@ export default function Customer() {
             .then((response) => {
                 if (response.status === 404) {
                     setNotFound(true);
+                }else if(response.status === 401){
+                    navigate('/login')
                 }
 
                 if (!response.ok) throw new Error('Something went wrong');

@@ -7,6 +7,7 @@ import Dictionary from './pages/Dictionary';
 import Definition from './pages/Definition';
 import NotFound from './components/NotFound';
 import Customer from './pages/Customer';
+import Login from './pages/Login';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path='/404' element={<NotFound />} />
           <Route path='*' element={<NotFound />} />
           <Route path='/customer/:id' element={<Customer />} />
+          <Route path='/login' element={<Login />} />
         </Routes>
       </Header>
     </BrowserRouter>

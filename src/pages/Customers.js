@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { data, Link } from "react-router-dom"
+import { data, Link, useNavigate } from "react-router-dom"
 import { baseurl } from "../shared";
 import AddCustomer from "../components/AddCustomer";
 
@@ -11,11 +11,18 @@ export default function Customers() {
         setShow(!show);
     }
 
+    const navigate = useNavigate();
     useEffect(() => {
         console.log('Fetching...')
         const url = baseurl + 'api/customers/';
         fetch(url)
-            .then((response) => response.json())
+            .then((response) => {
+
+                if(response.status === 401){
+                    navigate('/login');
+                }
+                response.json()
+            })
             .then((data) => {
                 setCustomers(data.customers);
             });
