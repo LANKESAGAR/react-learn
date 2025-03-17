@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate,useLocation } from "react-router-dom"
 import NotFound from "../components/NotFound";
 import { baseurl } from "../shared";
 
@@ -9,6 +9,7 @@ export default function Customer() {
     const [customer, setCustomer] = useState(null);
     const [tempCustomer, setTempCustomer] = useState();
     const [notFound, setNotFound] = useState();
+    const location = useLocation();
     const navigate = useNavigate();
     const [changed, setChanged] = useState(false);
     const [error, setError] = useState();
@@ -41,7 +42,11 @@ export default function Customer() {
                 if (response.status === 404) {
                     setNotFound(true);
                 }else if(response.status === 401){
-                    navigate('/login')
+                    navigate('/login', {
+                        state: {
+                            previousUrl: location.pathname || "/",
+                        },
+                    })
                 }
 
                 if (!response.ok) throw new Error('Something went wrong');
@@ -69,7 +74,11 @@ export default function Customer() {
         })
             .then((response) => {
                 if(response.status === 401){
-                    navigate('/login')
+                    navigate('/login', {
+                        state: {
+                            previousUrl: location.pathname || "/",
+                        },
+                    })
                 }
                 if (!response.ok) throw new Error('Something went wrong');
                 return response.json()
@@ -140,7 +149,11 @@ export default function Customer() {
                         })
                             .then((response) => {
                                 if(response.status === 401){
-                                    navigate('/login')
+                                    navigate('/login', {
+                                        state: {
+                                            previousUrl: location.pathname || "/",
+                                        },
+                                    })
                                 }
                                 if (!response.ok) {
                                     throw new Error('Something went wrong')
