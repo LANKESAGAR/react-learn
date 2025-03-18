@@ -1,10 +1,12 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Link, useNavigate,useLocation } from "react-router-dom"
 import NotFound from "../components/NotFound";
 import { baseurl } from "../shared";
+import { LoginContext } from "../App";
 
 export default function Customer() {
+    const [loggedIn, setLoggedIn] = useContext(LoginContext);
     const { id } = useParams();
     const [customer, setCustomer] = useState(null);
     const [tempCustomer, setTempCustomer] = useState();
@@ -42,6 +44,7 @@ export default function Customer() {
                 if (response.status === 404) {
                     setNotFound(true);
                 }else if(response.status === 401){
+                    setLoggedIn(false);
                     navigate('/login', {
                         state: {
                             previousUrl: location.pathname || "/",

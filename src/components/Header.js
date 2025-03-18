@@ -1,12 +1,14 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { NavLink } from 'react-router-dom'
+import { useContext, useEffect } from 'react'
+import { LoginContext } from '../App'
 
 const navigation = [
     { name: 'Employees', href: '/employees' },
     { name: 'Customers', href: '/customers' },
     { name: 'Dictionary', href: '/dictionary' },
-    { name: 'Calendar', href: '/someother' },
+    //{ name: 'Calendar', href: '/someother' },
 ]
 
 function classNames(...classes) {
@@ -14,6 +16,8 @@ function classNames(...classes) {
 }
 
 export default function Header(props) {
+    const [loggedIn, setLoggedIn] = useContext(LoginContext);
+
     return (
         <>
             <Disclosure as="nav" className="bg-gray-800">
@@ -44,6 +48,12 @@ export default function Header(props) {
                                             {item.name}
                                         </NavLink>
                                     ))}
+                                    <NavLink
+                                        to={loggedIn ? '/logout' : '/login'}
+                                        className="rounded-md px-3 py-2 text-sm font-medium no-underline text-gray-300 hover:bg-gray-700 hover:text-white"
+                                    >
+                                        {loggedIn ? 'Logout' : 'Login'}
+                                    </NavLink>
                                 </div>
                             </div>
                         </div>
@@ -76,6 +86,12 @@ export default function Header(props) {
                                 {item.name}
                             </NavLink>
                         ))}
+                        <NavLink
+                                        to={loggedIn ? '/logout' : '/login'}
+                                        className="rblock rounded-md px-3 py-2 text-base font-medium no-underline text-gray-300 hover:bg-gray-700 hover:text-white"
+                                    >
+                                        {loggedIn ? 'Logout' : 'Login'}
+                                    </NavLink>
                     </div>
                 </DisclosurePanel>
             </Disclosure>
