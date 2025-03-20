@@ -1,78 +1,52 @@
-import { useState, useEffect } from "react"
-import {v4 as uuid4} from 'uuid';
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useEffect } from "react";
+import { v4 as uuid4 } from "uuid";
+import { useParams, Link } from "react-router-dom";
 import NotFound from "../components/NotFound";
 import DefinitionSearch from "../components/DefinitionSearch";
+import useFetch from "../hooks/UseFetch";
 
 export default function Definition() {
-
-    const [word, setWord] = useState([]);
-    const [notFound, setNotFound] = useState(false);
-    const [error, setError] = useState(false);
-    let {search} = useParams();
-    const navigate = useNavigate();
+    const { search } = useParams();
+    const { data: word, error, loading } = useFetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${search}`);
 
     useEffect(() => {
-        fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + search)
-            .then((response) => {
-                if(response.status === 404){
-                    setNotFound(true);
-                }
+        console.log("Search term:", search);
+        console.log("Fetched Data in Definition.js:", word);
+        console.log("Error:", error);
+    }, [word, error, search]);
 
-                if(!response.ok){
-                    setError(true);
-                    throw new Error("Seomething went wrong")
-                }
+    if (loading) {
+        return <p>Loading...</p>;
+    }
 
-                return response.json()
-
-            })
-            .then((data) => {
-                if (data && Array.isArray(data) && data.length > 0 && data[0].meanings) {
-                    setWord(data[0].meanings);
-                    console.log(data[0].meanings);
-                  } else {
-                    setNotFound(true); // Handle unexpected API responses
-                  }
-            })
-            .catch((error) => {
-                console.error("Error fetching definition:", error);
-                setNotFound(true);
-              });
-    }, [search])
-
-    if(notFound){
+    if (error) {
         return (
             <>
-            <NotFound />
-            <Link to="/dictionary">Search for Another Word</Link>
+                <p>Something went wrong: {error}</p>
+                <Link to="/dictionary">Search for Another Word</Link>
             </>
         );
     }
-    if(error){
+
+    if (!word || !word[0]?.meanings) {
         return (
             <>
-            <p>Something went wrong, try again</p>
-            <Link to="/dictionary">Search for Another Word</Link>
+                <NotFound />
+                <Link to="/dictionary">Search for Another Word</Link>
             </>
         );
     }
+
     return (
         <>
-            {word ? (  <>
-            <h1>Here is the definition</h1>
-            {word.map((meaning) => {
-
-                return (
-                    <p key={uuid4()}>
-                        {meaning.partOfSpeech + ': '}:
-                        {meaning.definitions[0].definition}
-                    </p>
-                );
-            })} 
+            <h1>Here is the definition of "{search}"</h1>
+            {word[0].meanings.map((meaning) => (
+                <p key={uuid4()}>
+                    <strong>{meaning.partOfSpeech}:</strong> {meaning.definitions[0].definition}
+                </p>
+            ))}
             <p>Search Again:</p>
             <DefinitionSearch />
-            </>
-        ): null}
-        </>);
+        </>
+    );
 }
