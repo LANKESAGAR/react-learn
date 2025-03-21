@@ -3,10 +3,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { baseurl } from "../shared";
 import AddCustomer from "../components/AddCustomer";
 import { LoginContext } from "../App";
+import useFetch from "../hooks/UseFetch";
 
 export default function Customers() {
     const [loggedIn, setLoggedIn] = useContext(LoginContext);
-    const [customers, setCustomers] = useState([]); 
+    //const [customers, setCustomers] = useState([]); 
     const [show, setShow] = useState(false);
 
     function toggleShow() {
@@ -16,6 +17,18 @@ export default function Customers() {
     const location = useLocation();
     const navigate = useNavigate();
 
+    const url = baseurl + 'api/customers/';
+    const {data: { customers } = {}, errorStatus} = useFetch(url, {method:'GET',
+        headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('access'),
+    },
+});
+
+    useEffect(()=>{
+        console.log(customers, errorStatus);
+    })
+/*
     useEffect(() => {
         console.log('Fetching...');
         const url = baseurl + 'api/customers/';
@@ -42,8 +55,10 @@ export default function Customers() {
             })
             .catch((error) => console.error("Error fetching customers:", error));
     }, [navigate, location.pathname]); 
+    */
 
     function newCustomer(name, industry) {
+        /*
         const data = { name: name, industry: industry };
         const url = baseurl + 'api/customers/';
         fetch(url, {
@@ -65,13 +80,14 @@ export default function Customers() {
                 setCustomers((prevCustomers) => [...prevCustomers, data.customer]);
             })
             .catch((e) => console.log(e));
+            */
     }
 
     return (
         <>
             <h1>Here are our customers:</h1>
 
-            {customers.length > 0 ? (
+            {customers ? (
                 customers.map((customer) => (
                     <div className="m-2" key={customer.id}>
                         <Link to={"/customer/" + customer.id}>
