@@ -30,40 +30,15 @@ export default function Customers() {
         request();
     }, []);
 
-    useEffect(() => {
-        console.log(request, appendData, customers, errorStatus);
-    })
-    /*
-        useEffect(() => {
-            console.log('Fetching...');
-            const url = baseurl + 'api/customers/';
-            fetch(url, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: 'Bearer ' + localStorage.getItem('access'),
-                },
-            })
-                .then((response) => {
-                    if (response.status === 401) {
-                        setLoggedIn(false);
-                        navigate('/login', {
-                            state: {
-                                previousUrl: location.pathname || "/",
-                            },
-                        });
-                        return null;
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    if (data) setCustomers(data.customers || []);
-                })
-                .catch((error) => console.error("Error fetching customers:", error));
-        }, [navigate, location.pathname]); 
-        */
-
+    // useEffect(() => {
+    //     console.log(request, appendData, customers, errorStatus);
+    // })
+    
     function newCustomer(name, industry) {
         appendData({ name: name, industry: industry});
+        if(!errorStatus){
+            toggleShow();
+        }
     }
 
     return (

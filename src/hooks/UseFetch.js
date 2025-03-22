@@ -53,9 +53,7 @@ export default function useFetch(url, {method, headers, body} = {}){
             })
             .then((d)=>{
                 const submitted = Object.values(d)[0];
-                console.log('in the then...',submitted);
-                console.log(data);
-
+                
                 const newState = {...data};
                 Object.values(newState)[0].push(submitted);
 
