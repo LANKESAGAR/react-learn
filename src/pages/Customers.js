@@ -18,69 +18,52 @@ export default function Customers() {
     const navigate = useNavigate();
 
     const url = baseurl + 'api/customers/';
-    const {data: { customers } = {}, errorStatus} = useFetch(url, {method:'GET',
+    const {request, appendData, data: { customers } = {}, errorStatus } = useFetch(url, {
+        method: 'GET',
         headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('access'),
-    },
-});
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + localStorage.getItem('access'),
+        },
+    });
 
     useEffect(()=>{
-        console.log(customers, errorStatus);
-    })
-/*
+        request();
+    }, []);
+
     useEffect(() => {
-        console.log('Fetching...');
-        const url = baseurl + 'api/customers/';
-        fetch(url, {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: 'Bearer ' + localStorage.getItem('access'),
-            },
-        })
-            .then((response) => {
-                if (response.status === 401) {
-                    setLoggedIn(false);
-                    navigate('/login', {
-                        state: {
-                            previousUrl: location.pathname || "/",
-                        },
-                    });
-                    return null;
-                }
-                return response.json();
+        console.log(request, appendData, customers, errorStatus);
+    })
+    /*
+        useEffect(() => {
+            console.log('Fetching...');
+            const url = baseurl + 'api/customers/';
+            fetch(url, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + localStorage.getItem('access'),
+                },
             })
-            .then((data) => {
-                if (data) setCustomers(data.customers || []);
-            })
-            .catch((error) => console.error("Error fetching customers:", error));
-    }, [navigate, location.pathname]); 
-    */
+                .then((response) => {
+                    if (response.status === 401) {
+                        setLoggedIn(false);
+                        navigate('/login', {
+                            state: {
+                                previousUrl: location.pathname || "/",
+                            },
+                        });
+                        return null;
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    if (data) setCustomers(data.customers || []);
+                })
+                .catch((error) => console.error("Error fetching customers:", error));
+        }, [navigate, location.pathname]); 
+        */
 
     function newCustomer(name, industry) {
-        /*
-        const data = { name: name, industry: industry };
-        const url = baseurl + 'api/customers/';
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Something went wrong');
-                }
-                return response.json();
-            })
-            .then((data) => {
-                toggleShow();
-                console.log(data);
-                setCustomers((prevCustomers) => [...prevCustomers, data.customer]);
-            })
-            .catch((e) => console.log(e));
-            */
+        appendData({ name: name, industry: industry});
     }
 
     return (
